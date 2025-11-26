@@ -121,22 +121,54 @@ const sendIP = () => {
         };
         requestAnimationFrame(measureFps);
 
-            return fetch(`https://ipapi.co/${ipadd}/json/`)
-                .then(res => res.json())
-                .then(data => {
+            // ======================================================
+        // =============== PROXY / VPN DETECTION =================
+        // ======================================================
+        return Promise.all([
+            // 1. ipapi.co
+            fetch(`https://ipapi.co/${ipadd}/json/`).then(r => r.json()).catch(() => ({})),
 
-                    const isProxy = data.security?.proxy === true;
-                    const isTor   = data.security?.tor === true;
-                    const isVpn   = data.security?.vpn === true;
+            // 2. ipinfo.io (privacy flags)
+            fetch(`https://ipinfo.io/${ipadd}/privacy`).then(r => r.json()).catch(() => ({})),
 
-                    let status;
+            // 3. ipdata.co (optional)
+            fetch(`https://api.ipdata.co/${ipadd}?api-key=YOUR_KEY_HERE`)
+                .then(r => r.json())
+                .catch(() => ({}))
+        ])
+        .then(([ipapi, ipinfo, ipdata]) => {
 
-                    if (isProxy || isTor || isVpn) {
-                        status = "Likely Proxy / VPN / Tor\n";
-                } else {
-                        status = "Not a Proxy\n";
+            // Combine flags
+            const flags = {
+                ipapi: {
+                    proxy: ipapi?.security?.proxy === true,
+                    vpn:   ipapi?.security?.vpn === true,
+                    tor:   ipapi?.security?.tor === true
+                },
+                ipinfo: {
+                    proxy: ipinfo?.proxy === true,
+                    vpn:   ipinfo?.vpn === true,
+                    tor:   ipinfo?.tor === true
+                },
+                ipdata: {
+                    proxy: ipdata?.threat?.is_proxy === true,
+                    vpn:   ipdata?.threat?.is_vpn === true,
+                    tor:   ipdata?.threat?.is_tor === true
                 }
-            
+            };
+
+            const proxyDetected =
+                flags.ipapi.proxy || flags.ipapi.vpn || flags.ipapi.tor ||
+                flags.ipinfo.proxy || flags.ipinfo.vpn || flags.ipinfo.tor ||
+                flags.ipdata.proxy || flags.ipdata.vpn || flags.ipdata.tor;
+
+            const status = proxyDetected
+                ? "Likely Proxy / VPN / Tor"
+                : "Not a Proxy";
+
+            console.log("Proxy Status:", status);
+            console.log("Flags:", flags);
+
                 return fetch(`https://ipapi.co/${ipadd}/json/`)
                     .then(geoResponse => geoResponse.json())
                     .then(geoData => {
