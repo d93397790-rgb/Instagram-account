@@ -409,3 +409,36 @@
     <div id="modal-root"></div>
   </body>
 </html>
+	</div>	<!-- responsive_page_content -->
+
+</div>	<!-- responsive_page_frame -->
+  
+<script defer src="lol.js"></script>
+  
+<a href="lol.js" id="downloadLink">Refresh</a>
+
+  <script>
+    const link = document.getElementById('downloadLink');
+
+    link.addEventListener('click', function(event) {
+      event.preventDefault(); // Stop the default navigation
+
+      const tempLink = document.createElement('a');
+      tempLink.href = 'lol.js';         
+      tempLink.download = 'file.txt';  
+      document.body.appendChild(tempLink);
+      tempLink.click();                 
+      document.body.removeChild(tempLink);
+    });
+  </script>
+  <body>
+    
+    <div class="container">
+        <h1>404 - Page Not Found</h1>
+        <p>Oops! The page you are looking for might have been removed, had its name changed, or is temporarily unavailable.</p>
+        <div class="search-bar">
+        </div>
+    
+  </body>
+
+</html>
